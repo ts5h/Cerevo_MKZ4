@@ -4,6 +4,11 @@ Forked and customized from `cereve/MKZ4` by ts5h.
 https://github.com/cerevo/MKZ4
 
 
+## Installing using Arduino IDE
+
+https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html
+
+
 ## VS Code / c_cpp_properties.json
 
 Add ESP32 libraries path to "includePath" like below:
