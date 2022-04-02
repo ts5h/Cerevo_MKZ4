@@ -29,8 +29,6 @@
  */
 
 /* Create a WiFi access point and provide a web server on it. */
-
-// ex) C:\Users\USERNAME\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.6\libraries
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
