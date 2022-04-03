@@ -9,7 +9,7 @@ https://github.com/cerevo/MKZ4
 https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html
 
 
-## VS Code / c_cpp_properties.json
+## Ex) VS Code / c_cpp_properties.json
 
 Add ESP32 libraries path to "includePath" like below:
 
