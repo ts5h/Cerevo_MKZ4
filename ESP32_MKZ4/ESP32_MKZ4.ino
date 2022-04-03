@@ -54,7 +54,7 @@ extern String form;
 // For SG90 Servo motor
 #include <ESP32Servo.h>
 
-// Degree / Should be adjusted for each individual servo
+// Degrees / You should adjust for each individual servo
 #define SERVO_CENTER 84
 #define SERVO_LEFT 74
 #define SERVO_RIGHT 94
@@ -66,7 +66,6 @@ char state = COMMAND_STOP;
 
 #define LED_H (digitalWrite(12, HIGH))
 #define LED_L (digitalWrite(12, LOW))
-
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
@@ -119,7 +118,7 @@ void handleRoot() {
 }
 
 void handle_stop() {
-  Serial.println("stop");
+  Serial.println("Stop");
   LED_L;
   stop_motor();
   state = COMMAND_STOP;
@@ -128,54 +127,54 @@ void handle_stop() {
 }
 
 void handle_forward() {
-  Serial.println("FORWARD");
+  Serial.println("Forward");
   drive();
   servo_control(SERVO_CENTER);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back() {
-  Serial.println("back");
+  Serial.println("Back");
   back();
   servo_control(SERVO_CENTER);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_left() {
-  Serial.println("left");
+  Serial.println("Left");
   servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_right() {
-  Serial.println("right");
+  Serial.println("Right");
   servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_forward_left() {
-  Serial.println("f_left");
+  Serial.println("Forward Left");
   drive();
   servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_forward_right() {
-  Serial.println("f_right");
+  Serial.println("Forward Right");
   drive();
   servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back_left() {
-  Serial.println("b_left");
+  Serial.println("Back Left");
   back();
   servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back_right() {
-  Serial.println("b_right");
+  Serial.println("Back Right");
   back();
   servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
@@ -183,15 +182,15 @@ void handle_back_right() {
 
 void drive() {
   switch (state) {
-  case COMMAND_BACK:
-    stop_motor();
-    delay(10);
-    start_motor();
-    break;
+    case COMMAND_BACK:
+      stop_motor();
+      delay(10);
+      start_motor();
+      break;
 
-  case COMMAND_STOP:
-    start_motor();
-    break;
+    case COMMAND_STOP:
+      start_motor();
+      break;
   }
 
   state = COMMAND_START;
@@ -199,15 +198,15 @@ void drive() {
 
 void back() {
   switch (state) {
-  case COMMAND_START:
-    stop_motor();
-    delay(10);
-    reverse_motor();
-    break;
+    case COMMAND_START:
+      stop_motor();
+      delay(10);
+      reverse_motor();
+      break;
 
-  case COMMAND_STOP:
-    reverse_motor();
-    break;
+    case COMMAND_STOP:
+      reverse_motor();
+      break;
   }
 
   state = COMMAND_BACK;
