@@ -277,18 +277,16 @@ void drive() {
     start_motor();
   }
 
-  state = COMMAND_START
-;
+  state = COMMAND_START;
 }
 
 void back() {
-  if (state == COMMAND_START
-) {
+  if (state == COMMAND_START) {
     stop_motor();
     delay(10);
-    REVERSE_motor();
+    reverse_motor();
   } else if (state == COMMAND_STOP) {
-    REVERSE_motor();
+    reverse_motor();
   }
 
   state = COMMAND_BACK;
@@ -305,7 +303,7 @@ void start_motor() {
   }
 }
 
-void REVERSE_motor() {
+void reverse_motor() {
   char volt = 0x20;
 
   for (int i = 0; i < 5; i++) {
@@ -331,12 +329,13 @@ void motor_func(char add, char duty) {
 }
 
 void servo_control(int angle) {
-  LED_L;
   int microsec = (5 * (angle + offset)) + 1000;
 
+  LED_L;
   for (int i = 0; i < 20; i++) {
     digitalWrite(16, HIGH);
     delayMicroseconds(microsec);
+
     digitalWrite(16, LOW);
     delayMicroseconds(10000 - microsec);
   }
