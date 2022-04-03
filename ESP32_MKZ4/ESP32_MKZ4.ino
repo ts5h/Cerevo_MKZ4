@@ -269,24 +269,32 @@ void handle_back_right() {
 }
 
 void drive() {
-  if (state == COMMAND_BACK) {
-    stop_motor();
-    delay(10);
-    start_motor();
-  } else if (state == COMMAND_STOP) {
-    start_motor();
+  switch(state) {
+    case COMMAND_BACK:
+      stop_motor();
+      delay(10);
+      start_motor();
+      break;
+    
+    case COMMAND_STOP:
+      start_motor();
+      break;
   }
 
   state = COMMAND_START;
 }
 
 void back() {
-  if (state == COMMAND_START) {
-    stop_motor();
-    delay(10);
-    reverse_motor();
-  } else if (state == COMMAND_STOP) {
-    reverse_motor();
+  switch(state) {
+    case COMMAND_START:
+      stop_motor();
+      delay(10);
+      reverse_motor();
+      break;
+
+    case COMMAND_STOP:
+      reverse_motor();
+      break;
   }
 
   state = COMMAND_BACK;
