@@ -3,6 +3,11 @@ Customized MKZ4 Firmware for ESP32 (**NOT** ESP8266).
 Forked from `cereve/MKZ4` and customized.  
 https://github.com/cerevo/MKZ4
 
+## Dependencies
+
+- ESP32Servo
+https://www.arduino.cc/reference/en/libraries/esp32servo/
+
 
 ## ESP32-Arduino / Installing using Arduino IDE
 
@@ -16,7 +21,8 @@ Add ESP32 libraries path to "includePath" like below:
 ```.vscode/c_cpp_properties.json
 "includePath": [
     "C:\\Users\\at4\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\libraries",
-    "${workspaceFolder}/**"
+    "${workspaceFolder}/**",
+    "..\\libraries"
 ],
 ```
 
