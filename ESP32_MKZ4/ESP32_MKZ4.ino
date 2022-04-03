@@ -28,8 +28,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ESP32Servo.h>
-
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
 #include <WiFi.h>
@@ -53,18 +51,20 @@ WebServer server_8080(8080);
 #define REVERSE 0x02
 
 // For SG90 Servo motor
+#include <ESP32Servo.h>
+
 // Degree / You should adjust for each individual servo
 #define SERVO_CENTER 84
 #define SERVO_LEFT 74
 #define SERVO_RIGHT 94
 
-#define LED_H (digitalWrite(12, HIGH))
-#define LED_L (digitalWrite(12, LOW))
-
 Servo myServo;
 const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
 // offset = 10;
+
+#define LED_H (digitalWrite(12, HIGH))
+#define LED_L (digitalWrite(12, LOW))
 
 String form =
     "<html>"
