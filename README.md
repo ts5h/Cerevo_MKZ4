@@ -5,7 +5,7 @@ https://github.com/cerevo/MKZ4
 
 ## Dependencies
 
-- ESP32Servo
+- ESP32Servo  
 https://www.arduino.cc/reference/en/libraries/esp32servo/
 
 
