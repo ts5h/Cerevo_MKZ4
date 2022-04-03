@@ -40,22 +40,23 @@ const char *password = "";
 WebServer server(80);
 WebServer server_8080(8080);
 
-/* set I2C library*/
+/* Set I2C library*/
 #include <Wire.h>
 #define ADDR1 0x64
 
-#define command_start 0
-#define command_stop 1
-#define command_back 2
-#define forward 0x01
-#define reverse 0x02
-#define servo_left 65
-#define servo_right 110
+#define COMMAND_START 0
+#define COMMAND_STOP 1
+#define COMMAND_BACK 2
+#define FORWARD 0x01
+#define REVERSE 0x02
+#define SERVO_CENTER 90
+#define SERVO_LEFT 65
+#define SERVO_RIGHT 115
 
 #define LED_H (digitalWrite(12, HIGH))
 #define LED_L (digitalWrite(12, LOW))
 
-char state = command_stop;
+char state = COMMAND_STOP;
 int offset = 10;
 
 String form =
@@ -115,7 +116,7 @@ String form =
     "var url = null;"
     "if (x < threshold * -1) {"
     "if (y < threshold * -1) {"
-    "url = '/left forward';"
+    "url = '/left FORWARD';"
     "} else if (y > threshold) {"
     "url = '/left back';"
     "} else {"
@@ -123,7 +124,7 @@ String form =
     "}"
     "} else if (x > threshold) {"
     "if (y < threshold * -1) {"
-    "url = '/right forward';"
+    "url = '/right FORWARD';"
     "} else if (y > threshold) {"
     "url = '/right back';"
     "} else {"
@@ -131,7 +132,7 @@ String form =
     "}"
     "} else {"
     "if (y < threshold * -1) {"
-    "url = '/forward';"
+    "url = '/FORWARD';"
     "} else if (y > threshold) {"
     "url = '/back';"
     "}"
@@ -174,12 +175,12 @@ void setup() {
 
   server.on("/", handleRoot);
   server_8080.on("/stop", handle_stop);
-  server_8080.on("/forward", handle_forward);
+  server_8080.on("/FORWARD", handle_forward);
   server_8080.on("/back", handle_back);
   server_8080.on("/left", handle_left);
   server_8080.on("/right", handle_right);
-  server_8080.on("/leftforward", handle_forward_left);
-  server_8080.on("/rightforward", handle_forward_right);
+  server_8080.on("/leftFORWARD", handle_forward_left);
+  server_8080.on("/rightFORWARD", handle_forward_right);
   server_8080.on("/leftback", handle_back_left);
   server_8080.on("/rightback", handle_back_right);
 
@@ -208,108 +209,108 @@ void handle_stop() {
   Serial.println("stop");
   LED_L;
   stop_motor();
-  state = command_stop;
+  state = COMMAND_STOP;
   LED_H;
   server_8080.send(200, "text/html", "");
 }
 
 void handle_forward() {
-  Serial.println("forward");
+  Serial.println("FORWARD");
   drive();
-  servo_control(90);
+  servo_control(SERVO_CENTER);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back() {
   Serial.println("back");
   back();
-  servo_control(90);
+  servo_control(SERVO_CENTER);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_left() {
   Serial.println("left");
-  servo_control(servo_left);
+  servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_right() {
   Serial.println("right");
-  servo_control(servo_right);
+  servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_forward_left() {
   Serial.println("f_left");
   drive();
-  servo_control(servo_left);
+  servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_forward_right() {
   Serial.println("f_right");
   drive();
-  servo_control(servo_right);
+  servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back_left() {
   Serial.println("b_left");
   back();
-  servo_control(servo_left);
+  servo_control(SERVO_LEFT);
   server_8080.send(200, "text/html", "");
 }
 
 void handle_back_right() {
   Serial.println("b_right");
   back();
-  servo_control(servo_right);
+  servo_control(SERVO_RIGHT);
   server_8080.send(200, "text/html", "");
 }
 
 void drive() {
-  if (state == command_back) {
+  if (state == COMMAND_BACK) {
     stop_motor();
     delay(10);
     start_motor();
-  } else if (state == command_stop) {
+  } else if (state == COMMAND_STOP) {
     start_motor();
   }
 
-  state = command_start;
+  state = COMMAND_START
+;
 }
 
 void back() {
-  if (state == command_start) {
+  if (state == COMMAND_START
+) {
     stop_motor();
     delay(10);
-    reverse_motor();
-  } else if (state == command_stop) {
-    reverse_motor();
+    REVERSE_motor();
+  } else if (state == COMMAND_STOP) {
+    REVERSE_motor();
   }
 
-  state = command_back;
+  state = COMMAND_BACK;
 }
 
 void start_motor() {
-  char i, volt;
-  volt = 0x20;
+  char volt = 0x20;
 
-  for (i = 0; i < 5; i++) {
+  for (int i = 0; i < 5; i++) {
     volt = volt + ((0x40) * i);
-    volt = volt | forward;
+    volt = volt | FORWARD;
     motor_func(ADDR1, volt);
     delay(10);
   }
 }
 
-void reverse_motor() {
-  char i, volt;
-  volt = 0x20;
+void REVERSE_motor() {
+  char volt = 0x20;
 
-  for (i = 0; i < 5; i++) {
+  for (int i = 0; i < 5; i++) {
     volt = volt + ((0x40) * i);
-    volt = volt | reverse;
+    volt = volt | REVERSE;
     motor_func(ADDR1, volt);
     delay(10);
   }
@@ -330,11 +331,10 @@ void motor_func(char add, char duty) {
 }
 
 void servo_control(int angle) {
-  int microsec, i;
   LED_L;
-  microsec = (5 * (angle + offset)) + 1000;
+  int microsec = (5 * (angle + offset)) + 1000;
 
-  for (i = 0; i < 20; i++) {
+  for (int i = 0; i < 20; i++) {
     digitalWrite(16, HIGH);
     delayMicroseconds(microsec);
     digitalWrite(16, LOW);
