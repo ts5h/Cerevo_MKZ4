@@ -54,7 +54,7 @@ extern String form;
 // For SG90 Servo motor
 #include <ESP32Servo.h>
 
-// Degree / You should adjust for each individual servo
+// Degree / Should be adjusted for each individual servo
 #define SERVO_CENTER 84
 #define SERVO_LEFT 74
 #define SERVO_RIGHT 94
