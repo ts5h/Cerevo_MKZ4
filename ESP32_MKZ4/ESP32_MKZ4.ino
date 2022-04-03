@@ -338,6 +338,7 @@ void motor_func(char add, char duty) {
   Wire.endTransmission();
 }
 
+// May be this function has bugs (As of April 3rd, 2022)
 void servo_control(int angle) {
   int microsec = (5 * (angle + offset)) + 1000;
 
