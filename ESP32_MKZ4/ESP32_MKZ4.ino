@@ -28,6 +28,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <ESP32Servo.h>
+
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
 #include <WiFi.h>
@@ -50,16 +52,19 @@ WebServer server_8080(8080);
 #define FORWARD 0x01
 #define REVERSE 0x02
 
-#define SERVO_PIN 16
-#define SERVO_CENTER 90
-#define SERVO_LEFT 65
-#define SERVO_RIGHT 115
+// For SG90 Servo motor
+// Degree / You should adjust for each individual servo
+#define SERVO_CENTER 84
+#define SERVO_LEFT 74
+#define SERVO_RIGHT 94
 
 #define LED_H (digitalWrite(12, HIGH))
 #define LED_L (digitalWrite(12, LOW))
 
+Servo myServo;
+const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
-int offset = 10;
+// offset = 10;
 
 String form =
     "<html>"
@@ -188,11 +193,10 @@ void setup() {
 
   server.begin();
   server_8080.begin();
-
   Serial.println("HTTP server started");
-  pinMode(SERVO_PIN, OUTPUT);
-  pinMode(12, OUTPUT);
 
+  pinMode(12, OUTPUT);
+  myServo.attach(SERVO_PIN);
   LED_H;
   delay(100);
 }
@@ -205,7 +209,7 @@ void loop() {
 void handleRoot() {
   // Root
   server.send(200, "text/html", form);
-  }
+}
 
 void handle_stop() {
   Serial.println("stop");
@@ -271,32 +275,32 @@ void handle_back_right() {
 }
 
 void drive() {
-  switch(state) {
-    case COMMAND_BACK:
-      stop_motor();
-      delay(10);
-      start_motor();
-      break;
-    
-    case COMMAND_STOP:
-      start_motor();
-      break;
+  switch (state) {
+  case COMMAND_BACK:
+    stop_motor();
+    delay(10);
+    start_motor();
+    break;
+
+  case COMMAND_STOP:
+    start_motor();
+    break;
   }
 
   state = COMMAND_START;
 }
 
 void back() {
-  switch(state) {
-    case COMMAND_START:
-      stop_motor();
-      delay(10);
-      reverse_motor();
-      break;
+  switch (state) {
+  case COMMAND_START:
+    stop_motor();
+    delay(10);
+    reverse_motor();
+    break;
 
-    case COMMAND_STOP:
-      reverse_motor();
-      break;
+  case COMMAND_STOP:
+    reverse_motor();
+    break;
   }
 
   state = COMMAND_BACK;
@@ -338,17 +342,18 @@ void motor_func(char add, char duty) {
   Wire.endTransmission();
 }
 
-// May be this function has bugs (As of April 3rd, 2022)
 void servo_control(int angle) {
-  int microsec = (5 * (angle + offset)) + 1000;
+  // int microsec = (5 * (angle + offset)) + 1000;
+
+  // for (int i = 0; i < 20; i++) {
+  //   digitalWrite(SERVO_PIN, HIGH);
+  //   delayMicroseconds(microsec);
+
+  //   digitalWrite(SERVO_PIN, LOW);
+  //   delayMicroseconds(10000 - microsec);
+  // }
 
   LED_L;
-  for (int i = 0; i < 20; i++) {
-    digitalWrite(SERVO_PIN, HIGH);
-    delayMicroseconds(microsec);
-
-    digitalWrite(SERVO_PIN, LOW);
-    delayMicroseconds(10000 - microsec);
-  }
+  myServo.write(angle);
   LED_H;
 }
