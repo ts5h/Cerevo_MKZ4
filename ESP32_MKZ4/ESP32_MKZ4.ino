@@ -54,10 +54,10 @@ extern String form;
 // For SG90 Servo motor
 #include <ESP32Servo.h>
 
-// Degrees / You should adjust for each individual servo
-#define SERVO_CENTER 84
-#define SERVO_LEFT 74
-#define SERVO_RIGHT 94
+// Degrees
+#define SERVO_CENTER 90
+#define SERVO_LEFT 80
+#define SERVO_RIGHT 100
 
 Servo myServo;
 const int SERVO_PIN = 16;
