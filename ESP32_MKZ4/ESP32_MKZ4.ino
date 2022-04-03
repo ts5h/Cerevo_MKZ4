@@ -49,6 +49,8 @@ WebServer server_8080(8080);
 #define COMMAND_BACK 2
 #define FORWARD 0x01
 #define REVERSE 0x02
+
+#define SERVO_PIN 16
 #define SERVO_CENTER 90
 #define SERVO_LEFT 65
 #define SERVO_RIGHT 115
@@ -188,7 +190,7 @@ void setup() {
   server_8080.begin();
 
   Serial.println("HTTP server started");
-  pinMode(16, OUTPUT);
+  pinMode(SERVO_PIN, OUTPUT);
   pinMode(12, OUTPUT);
 
   LED_H;
@@ -341,10 +343,10 @@ void servo_control(int angle) {
 
   LED_L;
   for (int i = 0; i < 20; i++) {
-    digitalWrite(16, HIGH);
+    digitalWrite(SERVO_PIN, HIGH);
     delayMicroseconds(microsec);
 
-    digitalWrite(16, LOW);
+    digitalWrite(SERVO_PIN, LOW);
     delayMicroseconds(10000 - microsec);
   }
   LED_H;
