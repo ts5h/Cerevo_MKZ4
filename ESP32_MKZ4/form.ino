@@ -1,4 +1,4 @@
-// For controlling MKZ4 from smartphone
+// HTML string for controlling MKZ4 from smartphone
 String form =
     "<html>"
     "<head>"
