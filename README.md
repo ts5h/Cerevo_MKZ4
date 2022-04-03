@@ -1,6 +1,6 @@
 # WIP: ESP32 MKZ4
 Customized MKZ4 Firmware for ESP32 (**NOT** ESP8266).  
-Forked and customized from `cereve/MKZ4` by ts5h.  
+Forked from `cereve/MKZ4` and customized.  
 https://github.com/cerevo/MKZ4
 
 
