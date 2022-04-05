@@ -30,13 +30,12 @@
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
-#include <ArduinoWebsockets.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 
 /* Set these to your desired credentials. */
 const char* ssid = "MKZ4";
-const char* password = "mkz4";
+const char* password = "";
 
 WebServer server(80);
 WebServer server_8080(8080);
@@ -63,8 +62,8 @@ extern String form;
 Servo myServo;
 const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
-// offset = 10;
 
+#define LED_PIN 12
 #define LED_H (digitalWrite(12, HIGH))
 #define LED_L (digitalWrite(12, LOW))
 
@@ -74,8 +73,7 @@ char state = COMMAND_STOP;
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  Serial.println();
-  Serial.print("Configuring access point...");
+  Serial.println("Configuring access point...");
 
   Wire.begin(4, 14);
   delay(40);
@@ -102,8 +100,9 @@ void setup() {
   server_8080.begin();
   Serial.println("HTTP server started");
 
-  pinMode(12, OUTPUT);
   myServo.attach(SERVO_PIN);
+
+  pinMode(LED_PIN, OUTPUT);
   LED_H;
   delay(100);
 }
