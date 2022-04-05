@@ -11,8 +11,11 @@ https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html
 
 ## Dependencies
 
-- ESP32Servo  
+- Servo Library for ESP32
 https://www.arduino.cc/reference/en/libraries/esp32servo/
+
+- Arduino Websockets
+https://www.arduino.cc/reference/en/libraries/arduinowebsockets/
 
 
 ## Ex) VS Code / c_cpp_properties.json

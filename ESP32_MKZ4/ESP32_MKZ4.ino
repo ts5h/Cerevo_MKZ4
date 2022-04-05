@@ -30,12 +30,13 @@
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
+#include <ArduinoWebsockets.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 
 /* Set these to your desired credentials. */
-const char *ssid = "MKZ4";
-const char *password = "";
+const char* ssid = "MKZ4";
+const char* password = "mkz4";
 
 WebServer server(80);
 WebServer server_8080(8080);
@@ -54,10 +55,10 @@ extern String form;
 // For SG90 Servo motor
 #include <ESP32Servo.h>
 
-// Degrees
+// Degrees / You have to adjust your servo for each individual
 #define SERVO_CENTER 90
-#define SERVO_LEFT 80
-#define SERVO_RIGHT 100
+#define SERVO_LEFT 75
+#define SERVO_RIGHT 105
 
 Servo myServo;
 const int SERVO_PIN = 16;
