@@ -2,9 +2,9 @@
 String form = R"#(
 <html>
 <head>
-  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1'>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <title>MKZ4 Controller</title>
-  <style type='text/css'>
+  <style type="text/css">
     * {
       box-sizing: border-box;
       margin: 0;
@@ -25,7 +25,7 @@ String form = R"#(
       background-color: #0097c1;
     }
 
-    .value {
+    #value {
       position: fixed;
       width: 100%;
       top: 30px;
@@ -37,14 +37,18 @@ String form = R"#(
       text-transform: capitalize;
     }
 
-    .controller__wrapper {
+    #tif {
+      display: none;
+    }
+
+    #controller__wrapper {
       position: relative;
       width: 252px;
       height: 252px;
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    .controller {
+    #controller {
       position: absolute;
       width: 50px;
       height: 50px;
@@ -58,15 +62,15 @@ String form = R"#(
 </head>
 
 <body>
-  <div id='value' class='value'>connected</div>
-  <form id='form' action='' target='tif'>
-    <iframe src='javascript: false;' style='display: none' name='tif' id='tif'></iframe>
+  <div id="value">connected</div>
+  <form id="form" action="" target="tif">
+    <iframe id="tif" name="tif" src="javascript: false;"></iframe>
   </form>
-  <div id='controller__wrapper' class='controller__wrapper'>
-    <div id='controller' class='controller'></div>
+  <div id="controller__wrapper">
+    <div id="controller"></div>
   </div>
 
-  <script type='text/javascript'>
+  <script type="text/javascript">
     var espPort = 'http://192.168.4.1:8080';
     var command = '/stop';
     
