@@ -43,15 +43,15 @@ String form = R"#(
 
     #controller__wrapper {
       position: relative;
-      width: 252px;
-      height: 252px;
+      width: 282px;
+      height: 282px;
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     #controller {
       position: absolute;
-      width: 50px;
-      height: 50px;
+      width: 80px;
+      height: 80px;
       left: calc(50% - 25px);
       top: calc(50% - 25px);
       background: rgba(255, 255, 255, 0.2);
