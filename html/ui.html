@@ -27,11 +27,11 @@
     .value {
       position: fixed;
       width: 100%;
-      top: 40px;
+      top: 30px;
       text-align: center;
       color: white;
       font-family: sans-serif;
-      font-size: 200%;
+      font-size: 1rem;
       font-weight: normal;
       text-transform: capitalize;
     }
@@ -40,7 +40,6 @@
       position: relative;
       width: 252px;
       height: 252px;
-      top: -90px;
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
@@ -70,18 +69,23 @@
     var espPort = 'http://192.168.4.1:8080';
     var command = '/stop';
     
+    var value = document.getElementById('value');
     var form = document.getElementById('form');
     var wrapper = document.getElementById('controller__wrapper');
     var controller = document.getElementById('controller');
 
     var touchFlag = false;
     var controllerOffset = controller.clientWidth / 2;
-    var offsetX = wrapper.offsetLeft;
-    var offsetY = wrapper.offsetTop;
+    var wrapperOffsetX = wrapper.offsetLeft;
+    var wrapperOffsetY = wrapper.offsetTop;
     var startX = 100;
     var startY = 100;
     var maxX = 200;
     var maxY = 200;
+
+    var showValue = function (state) {
+      value.innerHTML = state;
+    };
 
     var moveHomePosition = function () {
       controller.style.left = startX;
@@ -98,29 +102,36 @@
       e.preventDefault();
 
       var touch = e.touches[0];
-      var controllerLeft = touch.clientX - offsetX - controllerOffset;
-      var controllerTop = touch.clientY - offsetY - controllerOffset;
+      var controllerLeft = touch.clientX - wrapperOffsetX - controllerOffset;
+      var controllerTop = touch.clientY - wrapperOffsetY - controllerOffset;
+      var x = 0;
+      var y = 0;
 
       if (controllerLeft <= 0) controllerLeft = 0;
       if (controllerLeft >= maxX) controllerLeft = maxX;
       if (controllerTop <= 0) controllerTop = 0;
       if (controllerTop >= maxY) controllerTop = maxY;
 
-
-
       controller.style.left = controllerLeft;
       controller.style.top = controllerTop;
+      x = controllerLeft - startX;
+      y = (controllerTop - startY) * -1;
 
-      console.log(controllerLeft, controllerTop);
+      form.action = espPort + '/move?x=' + x + '&y=' + y;
+      form.submit();
     };
 
     wrapper.ontouchend = function (e) {
       e.preventDefault();
       touchFlag = false;
+      form.action = espPort + '/stop';
+      form.submit();
       setTimeout(moveHomePosition, 50);
     }
 
-    moveHomePosition();
+    window.onload = function () {
+      moveHomePosition();
+    };
     
 
     // document.body.ontouchstart = function (event) {
