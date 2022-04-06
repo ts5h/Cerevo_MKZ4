@@ -5,11 +5,22 @@
   <title>MKZ4 Controller</title>
   <style type='text/css'>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    html, body {
+      width: 100%;
+      height: 100%
+    }
+
     body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
       background-color: #0097c1;
     }
 
@@ -24,6 +35,26 @@
       font-weight: normal;
       text-transform: capitalize;
     }
+
+    .controller__wrapper {
+      position: relative;
+      width: 302px;
+      height: 302px;
+      top: -50px;
+      border: 1px solid white;
+    }
+
+    .controller {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      left: calc(50% - 25px);
+      top: calc(50% - 25px);
+
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid white;
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -32,13 +63,12 @@
   <form id='form' action='' target='tif'>
     <iframe src='javascript: false;' style='display: none' name='tif' id='tif'></iframe>
   </form>
+  <div class="controller__wrapper">
+    <div class="controller"></div>
+  </div>
+
   <script type='text/javascript'>
     var offset = 50;
-    document.body.style.height = document.body.clientHeight + offset + 'px';
-    document.body.style.width = document.body.clientWidth + offset + 'px';
-    document.getElementsByTagName('html')[0].style.height = document.body.style.height + 'px';
-    document.getElementsByTagName('html')[0].style.width = document.body.style.width + 'px';
-
     var moveHomePosition = function () {
       document.body.scrollTop = offset / 2;
       document.body.scrollLeft = offset / 2;
