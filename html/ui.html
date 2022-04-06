@@ -27,7 +27,7 @@
     .value {
       position: fixed;
       width: 100%;
-      top: 50px;
+      top: 40px;
       text-align: center;
       color: white;
       font-family: sans-serif;
@@ -38,10 +38,10 @@
 
     .controller__wrapper {
       position: relative;
-      width: 302px;
-      height: 302px;
-      top: -50px;
-      border: 1px solid white;
+      width: 252px;
+      height: 252px;
+      top: -90px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .controller {
@@ -50,7 +50,6 @@
       height: 50px;
       left: calc(50% - 25px);
       top: calc(50% - 25px);
-
       background: rgba(255, 255, 255, 0.2);
       border: 1px solid white;
       border-radius: 50%;
@@ -63,75 +62,116 @@
   <form id='form' action='' target='tif'>
     <iframe src='javascript: false;' style='display: none' name='tif' id='tif'></iframe>
   </form>
-  <div class="controller__wrapper">
-    <div class="controller"></div>
+  <div id='controller__wrapper' class='controller__wrapper'>
+    <div id='controller' class='controller'></div>
   </div>
 
   <script type='text/javascript'>
-    var offset = 50;
-    var moveHomePosition = function () {
-      document.body.scrollTop = offset / 2;
-      document.body.scrollLeft = offset / 2;
-    };
-
-    setTimeout(moveHomePosition, 300);
-
-    var startX = 0;
-    var startY = 0;
+    var espPort = 'http://192.168.4.1:8080';
     var command = '/stop';
-    var threshold = 40;
-    var esp_port = 'http://192.168.4.1:8080';
-    var el_form = document.getElementById('form');
+    
+    var form = document.getElementById('form');
+    var wrapper = document.getElementById('controller__wrapper');
+    var controller = document.getElementById('controller');
 
-    document.body.ontouchstart = function (event) {
-      startX = event.touches[0].clientX;
-      startY = event.touches[0].clientY;
+    var touchFlag = false;
+    var controllerOffset = controller.clientWidth / 2;
+    var offsetX = wrapper.offsetLeft;
+    var offsetY = wrapper.offsetTop;
+    var startX = 100;
+    var startY = 100;
+    var maxX = 200;
+    var maxY = 200;
+
+    var moveHomePosition = function () {
+      controller.style.left = startX;
+      controller.style.top = startY;
     };
 
-    document.body.ontouchmove = function (event) {
-      var x = parseInt(event.touches[0].clientX - startX);
-      var y = parseInt(event.touches[0].clientY - startY);
-      var url = null;
-
-      if (x < threshold * -1) {
-        if (y < threshold * -1) {
-          url = '/left forward';
-        } else if (y > threshold) {
-          url = '/left back';
-        } else {
-          url = '/left';
-        }
-      } else if (x > threshold) {
-        if (y < threshold * -1) {
-          url = '/right forward';
-        } else if (y > threshold) {
-          url = '/right back';
-        } else {
-          url = '/right';
-        }
-      } else {
-        if (y < threshold * -1) {
-          url = '/forward';
-        } else if (y > threshold) {
-          url = '/back';
-        }
-      }
-
-      if (command != url && url) {
-        el_form.action = esp_port + url.replace(/<br>| /, '');
-        el_form.submit();
-
-        document.getElementById('value').innerHTML = url.replace(/\//, '');
-      }
-      command = url;
+    wrapper.ontouchstart = function (e) {
+      e.preventDefault();
+      touchFlag = true;
     };
 
-    document.body.ontouchend = function (event) {
-      el_form.action = esp_port + '/stop';
-      el_form.submit();
+    wrapper.ontouchmove = function (e) {
+      if (!touchFlag) return;
+      e.preventDefault();
+
+      var touch = e.touches[0];
+      var controllerLeft = touch.clientX - offsetX - controllerOffset;
+      var controllerTop = touch.clientY - offsetY - controllerOffset;
+
+      if (controllerLeft <= 0) controllerLeft = 0;
+      if (controllerLeft >= maxX) controllerLeft = maxX;
+      if (controllerTop <= 0) controllerTop = 0;
+      if (controllerTop >= maxY) controllerTop = maxY;
+
+
+
+      controller.style.left = controllerLeft;
+      controller.style.top = controllerTop;
+
+      console.log(controllerLeft, controllerTop);
+    };
+
+    wrapper.ontouchend = function (e) {
+      e.preventDefault();
+      touchFlag = false;
       setTimeout(moveHomePosition, 50);
-      document.getElementById('value').innerHTML = 'stop';
-    };
+    }
+
+    moveHomePosition();
+    
+
+    // document.body.ontouchstart = function (event) {
+    //   startX = event.touches[0].clientX;
+    //   startY = event.touches[0].clientY;
+    // };
+
+    // document.body.ontouchmove = function (event) {
+    //   var x = parseInt(event.touches[0].clientX - startX);
+    //   var y = parseInt(event.touches[0].clientY - startY);
+    //   var url = null;
+
+    //   if (x < threshold * -1) {
+    //     if (y < threshold * -1) {
+    //       url = '/left forward';
+    //     } else if (y > threshold) {
+    //       url = '/left back';
+    //     } else {
+    //       url = '/left';
+    //     }
+    //   } else if (x > threshold) {
+    //     if (y < threshold * -1) {
+    //       url = '/right forward';
+    //     } else if (y > threshold) {
+    //       url = '/right back';
+    //     } else {
+    //       url = '/right';
+    //     }
+    //   } else {
+    //     if (y < threshold * -1) {
+    //       url = '/forward';
+    //     } else if (y > threshold) {
+    //       url = '/back';
+    //     }
+    //   }
+
+    //   if (command != url && url) {
+    //     form.action = espPort + url.replace(/<br>| /, '');
+    //     form.submit();
+
+    //     document.getElementById('value').innerHTML = url.replace(/\//, '');
+    //   }
+    //   command = url;
+    // };
+
+    // document.body.ontouchend = function (event) {
+    //   form.action = espPort + '/stop';
+    //   form.submit();
+    //   setTimeout(moveHomePosition, 50);
+    //   document.getElementById('value').innerHTML = 'stop';
+    // };
   </script>
 </body>
 </html>
