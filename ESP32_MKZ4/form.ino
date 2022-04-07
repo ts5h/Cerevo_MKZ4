@@ -141,8 +141,6 @@ String form = R"#(
       form.elements['x'].value = x.toFixed(2);
       form.elements['y'].value = y.toFixed(2);
       form.submit();
-
-      console.log(form);
     };
 
     wrapper.ontouchend = function (e) {
