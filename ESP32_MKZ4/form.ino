@@ -64,8 +64,10 @@ String form = R"#(
 
 <body>
   <div id="value">connected</div>
-  <form id="form" action="" target="tif">
+  <form id="form" method="get" action="" target="tif">
     <iframe id="tif" name="tif" src="javascript: false;"></iframe>
+    <input type="hidden" name="x" value="0">
+    <input type="hidden" name="y" value="0">
   </form>
   <div id="controller__wrapper">
     <div id="controller"></div>
@@ -123,8 +125,24 @@ String form = R"#(
       x = controllerLeft - startX;
       y = (controllerTop - startY) * -1;
 
-      form.action = espPort + '/move?x=' + x + '&y=' + y;
+      if (x >= -10 && x <= 10) {
+        x = 0;
+      } else {
+        x = (x < -10 ? x + 10 : x - 10) / 90;
+      }
+
+      if (y >= -10 && y <= 10) {
+        y = 0;
+      } else {
+        y = (y < -10 ? y + 10 : y - 10) / 90;
+      }
+
+      form.action = espPort + '/move';
+      form.elements['x'].value = x.toFixed(2);
+      form.elements['y'].value = y.toFixed(2);
       form.submit();
+
+      console.log(form);
     };
 
     wrapper.ontouchend = function (e) {

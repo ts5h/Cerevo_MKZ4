@@ -55,6 +55,7 @@ WebServer server_8080(8080);
 
 // Degrees / You have to adjust your servo for each individual
 #define SERVO_CENTER 90
+#define SERVO_DEGREE 15
 #define SERVO_LEFT 75
 #define SERVO_RIGHT 105
 
@@ -87,14 +88,6 @@ void setup() {
   server.on("/", handle_root);
   server_8080.on("/stop", handle_stop);
   server_8080.on("/move", handle_move);
-  // server_8080.on("/forward", handle_forward);
-  // server_8080.on("/back", handle_back);
-  // server_8080.on("/left", handle_left);
-  // server_8080.on("/right", handle_right);
-  // server_8080.on("/leftforward", handle_forward_left);
-  // server_8080.on("/rightforward", handle_forward_right);
-  // server_8080.on("/leftback", handle_back_left);
-  // server_8080.on("/rightback", handle_back_right);
 
   server.begin();
   server_8080.begin();
@@ -129,103 +122,70 @@ void handle_stop() {
 }
 
 void handle_move() {
-  // TODO: Get Args
-  String x = server_8080.arg("x");
-  String y = server_8080.arg("y");
-  Serial.print(x);
-  Serial.print(", ");
-  Serial.println(y);
+  if (!server_8080.hasArg("x") || !server_8080.hasArg("y")) return;
+
+  float x = server_8080.arg("x").toFloat();
+  float y = server_8080.arg("y").toFloat();
+
+  LED_L;
+
+  // left, right
+  if (x == 0) {
+    myServo.write(SERVO_CENTER);
+  } else {
+    int degree = SERVO_CENTER + round(SERVO_DEGREE * x);
+    myServo.write(degree);
+    Serial.println(degree);
+  }
+
+  if (y == 0) {
+    Serial.println("Stop");
+    handle_stop();
+  } else if (y > 0) {
+    Serial.println("Forward");
+    drive(y);
+  } else {
+    Serial.println("Back");
+    back(y);
+  }
 
   server_8080.send(200, "text/html", "");
+  LED_H;
 }
 
-void handle_forward() {
-  Serial.println("Forward");
-  drive();
-  servo_control(SERVO_CENTER);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_back() {
-  Serial.println("Back");
-  back();
-  servo_control(SERVO_CENTER);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_left() {
-  Serial.println("Left");
-  servo_control(SERVO_LEFT);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_right() {
-  Serial.println("Right");
-  servo_control(SERVO_RIGHT);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_forward_left() {
-  Serial.println("Forward Left");
-  drive();
-  servo_control(SERVO_LEFT);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_forward_right() {
-  Serial.println("Forward Right");
-  drive();
-  servo_control(SERVO_RIGHT);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_back_left() {
-  Serial.println("Back Left");
-  back();
-  servo_control(SERVO_LEFT);
-  server_8080.send(200, "text/html", "");
-}
-
-void handle_back_right() {
-  Serial.println("Back Right");
-  back();
-  servo_control(SERVO_RIGHT);
-  server_8080.send(200, "text/html", "");
-}
-
-void drive() {
+void drive(float y) {
   switch (state) {
     case COMMAND_BACK:
       stop_motor();
       delay(10);
-      start_motor();
+      start_motor(y);
       break;
 
     case COMMAND_STOP:
-      start_motor();
+      start_motor(y);
       break;
   }
 
   state = COMMAND_START;
 }
 
-void back() {
+void back(float y) {
   switch (state) {
     case COMMAND_START:
       stop_motor();
       delay(10);
-      reverse_motor();
+      reverse_motor(y);
       break;
 
     case COMMAND_STOP:
-      reverse_motor();
+      reverse_motor(y);
       break;
   }
 
   state = COMMAND_BACK;
 }
 
-void start_motor() {
+void start_motor(float y) {
   char volt = 0x20;
 
   for (int i = 0; i < 5; i++) {
@@ -236,7 +196,7 @@ void start_motor() {
   }
 }
 
-void reverse_motor() {
+void reverse_motor(float y) {
   char volt = 0x20;
 
   for (int i = 0; i < 5; i++) {
@@ -259,20 +219,4 @@ void motor_func(char add, char duty) {
   Wire.write(0x00);
   Wire.write(duty);
   Wire.endTransmission();
-}
-
-void servo_control(int angle) {
-  // int microsec = (5 * (angle + offset)) + 1000;
-
-  // for (int i = 0; i < 20; i++) {
-  //   digitalWrite(SERVO_PIN, HIGH);
-  //   delayMicroseconds(microsec);
-
-  //   digitalWrite(SERVO_PIN, LOW);
-  //   delayMicroseconds(10000 - microsec);
-  // }
-
-  LED_L;
-  myServo.write(angle);
-  LED_H;
 }

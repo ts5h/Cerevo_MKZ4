@@ -1,4 +1,4 @@
-<!-- This HTML is a modified version for incorporate into form.ino -->
+<!-- This HTML is for incorporate into /ESP32_MKZ4/form.ino -->
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
@@ -63,8 +63,10 @@
 
 <body>
   <div id="value">connected</div>
-  <form id="form" action="" target="tif">
+  <form id="form" method="get" action="" target="tif">
     <iframe id="tif" name="tif" src="javascript: false;"></iframe>
+    <input type="hidden" name="x" value="0">
+    <input type="hidden" name="y" value="0">
   </form>
   <div id="controller__wrapper">
     <div id="controller"></div>
@@ -122,8 +124,24 @@
       x = controllerLeft - startX;
       y = (controllerTop - startY) * -1;
 
-      form.action = espPort + '/move?x=' + x + '&y=' + y;
+      if (x >= -10 && x <= 10) {
+        x = 0;
+      } else {
+        x = (x < -10 ? x + 10 : x - 10) / 90;
+      }
+
+      if (y >= -10 && y <= 10) {
+        y = 0;
+      } else {
+        y = (y < -10 ? y + 10 : y - 10) / 90;
+      }
+
+      form.action = espPort + '/move';
+      form.elements['x'].value = x.toFixed(2);
+      form.elements['y'].value = y.toFixed(2);
       form.submit();
+
+      console.log(form);
     };
 
     wrapper.ontouchend = function (e) {
