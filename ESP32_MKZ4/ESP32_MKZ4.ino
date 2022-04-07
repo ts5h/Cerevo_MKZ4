@@ -59,7 +59,7 @@ WebServer server_8080(8080);
 #define SERVO_LEFT 75
 #define SERVO_RIGHT 105
 
-Servo myServo;
+Servo servo;
 const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
 
@@ -93,7 +93,7 @@ void setup() {
   server_8080.begin();
   Serial.println("HTTP server started");
 
-  myServo.attach(SERVO_PIN);
+  servo.attach(SERVO_PIN);
 
   pinMode(LED_PIN, OUTPUT);
   LED_H;
@@ -131,29 +131,26 @@ void handle_move() {
 
   // left, right
   if (x == 0) {
-    myServo.write(SERVO_CENTER);
+    servo.write(SERVO_CENTER);
   } else {
     int degree = SERVO_CENTER + round(SERVO_DEGREE * x);
-    myServo.write(degree);
+    servo.write(degree);
     Serial.println(degree);
   }
 
   if (y == 0) {
-    Serial.println("Stop");
     handle_stop();
-  } else if (y > 0) {
-    Serial.println("Forward");
-    drive(y);
   } else {
-    Serial.println("Back");
-    back(y);
+    y > 0 ? drive(y) : back(y);
   }
 
-  server_8080.send(200, "text/html", "");
   LED_H;
+  server_8080.send(200, "text/html", "");
 }
 
 void drive(float y) {
+  Serial.println("Forward");
+
   switch (state) {
     case COMMAND_BACK:
       stop_motor();
@@ -165,11 +162,13 @@ void drive(float y) {
       start_motor(y);
       break;
   }
-
+  
   state = COMMAND_START;
 }
 
 void back(float y) {
+  Serial.println("Back");
+
   switch (state) {
     case COMMAND_START:
       stop_motor();

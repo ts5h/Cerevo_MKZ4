@@ -149,6 +149,8 @@ String form = R"#(
       e.preventDefault();
       touchFlag = false;
       form.action = espPort + '/stop';
+      form.elements['x'].value = 0;
+      form.elements['y'].value = 0;
       form.submit();
       setTimeout(moveHomePosition, 50);
     }
