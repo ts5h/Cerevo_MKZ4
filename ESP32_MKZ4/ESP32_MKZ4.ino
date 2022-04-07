@@ -34,12 +34,11 @@
 #include <WiFiClient.h>
 
 /* Set these to your desired credentials. */
-const char* ssid = "MKZ4";
-const char* password = "";
+const char *ssid = "MKZ4";
+const char *password = "";
 
 WebServer server(80);
 WebServer server_8080(8080);
-extern String form;
 
 /* Set I2C library*/
 #include <Wire.h>
@@ -63,9 +62,9 @@ Servo myServo;
 const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
 
-#define LED_PIN 12
-#define LED_H (digitalWrite(12, HIGH))
-#define LED_L (digitalWrite(12, LOW))
+#define LED_PIN 2
+#define LED_H (digitalWrite(2, HIGH))
+#define LED_L (digitalWrite(2, LOW))
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
@@ -85,16 +84,17 @@ void setup() {
   Serial.print("AP IP address: ");
   Serial.println(myIP);
 
-  server.on("/", handleRoot);
+  server.on("/", handle_root);
   server_8080.on("/stop", handle_stop);
-  server_8080.on("/FORWARD", handle_forward);
-  server_8080.on("/back", handle_back);
-  server_8080.on("/left", handle_left);
-  server_8080.on("/right", handle_right);
-  server_8080.on("/leftFORWARD", handle_forward_left);
-  server_8080.on("/rightFORWARD", handle_forward_right);
-  server_8080.on("/leftback", handle_back_left);
-  server_8080.on("/rightback", handle_back_right);
+  server_8080.on("/move", handle_move);
+  // server_8080.on("/forward", handle_forward);
+  // server_8080.on("/back", handle_back);
+  // server_8080.on("/left", handle_left);
+  // server_8080.on("/right", handle_right);
+  // server_8080.on("/leftforward", handle_forward_left);
+  // server_8080.on("/rightforward", handle_forward_right);
+  // server_8080.on("/leftback", handle_back_left);
+  // server_8080.on("/rightback", handle_back_right);
 
   server.begin();
   server_8080.begin();
@@ -112,8 +112,10 @@ void loop() {
   server_8080.handleClient();
 }
 
-void handleRoot() {
-  // Root
+
+// Control directions
+void handle_root() {
+  extern String form;
   server.send(200, "text/html", form);
 }
 
@@ -123,6 +125,17 @@ void handle_stop() {
   stop_motor();
   state = COMMAND_STOP;
   LED_H;
+  server_8080.send(200, "text/html", "");
+}
+
+void handle_move() {
+  // TODO: Get Args
+  String x = server_8080.arg("x");
+  String y = server_8080.arg("y");
+  Serial.print(x);
+  Serial.print(", ");
+  Serial.println(y);
+
   server_8080.send(200, "text/html", "");
 }
 

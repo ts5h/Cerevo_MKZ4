@@ -137,57 +137,6 @@
     window.onload = function () {
       moveHomePosition();
     };
-
-
-    // document.body.ontouchstart = function (event) {
-    //   startX = event.touches[0].clientX;
-    //   startY = event.touches[0].clientY;
-    // };
-
-    // document.body.ontouchmove = function (event) {
-    //   var x = parseInt(event.touches[0].clientX - startX);
-    //   var y = parseInt(event.touches[0].clientY - startY);
-    //   var url = null;
-
-    //   if (x < threshold * -1) {
-    //     if (y < threshold * -1) {
-    //       url = '/left forward';
-    //     } else if (y > threshold) {
-    //       url = '/left back';
-    //     } else {
-    //       url = '/left';
-    //     }
-    //   } else if (x > threshold) {
-    //     if (y < threshold * -1) {
-    //       url = '/right forward';
-    //     } else if (y > threshold) {
-    //       url = '/right back';
-    //     } else {
-    //       url = '/right';
-    //     }
-    //   } else {
-    //     if (y < threshold * -1) {
-    //       url = '/forward';
-    //     } else if (y > threshold) {
-    //       url = '/back';
-    //     }
-    //   }
-
-    //   if (command != url && url) {
-    //     form.action = espPort + url.replace(/<br>| /, '');
-    //     form.submit();
-
-    //     document.getElementById('value').innerHTML = url.replace(/\//, '');
-    //   }
-    //   command = url;
-    // };
-
-    // document.body.ontouchend = function (event) {
-    //   form.action = espPort + '/stop';
-    //   form.submit();
-    //   setTimeout(moveHomePosition, 50);
-    //   document.getElementById('value').innerHTML = 'stop';
-    // };
   </script>
 </body>
 </html>
