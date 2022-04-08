@@ -118,6 +118,7 @@ void handle_stop() {
   stop();
 
   server_8080.send(200, "text/html", "");
+  delay(10);
   LED_H;
 }
 
@@ -146,6 +147,7 @@ void handle_move() {
   }
 
   server_8080.send(200, "text/html", "");
+  delay(10);
   LED_H;
 }
 
