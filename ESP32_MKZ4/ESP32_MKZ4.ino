@@ -116,8 +116,9 @@ void handle_stop() {
   LED_L;
   servo.write(SERVO_CENTER);
   stop();
-  LED_H;
+
   server_8080.send(200, "text/html", "");
+  LED_H;
 }
 
 void handle_move() {
@@ -144,8 +145,8 @@ void handle_move() {
     y > 0 ? drive(y) : back(y);
   }
 
-  LED_H;
   server_8080.send(200, "text/html", "");
+  LED_H;
 }
 
 void stop() {
