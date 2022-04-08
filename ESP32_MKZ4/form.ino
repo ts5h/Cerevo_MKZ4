@@ -82,7 +82,6 @@ String form = R"#(
     var wrapper = document.getElementById('controller__wrapper');
     var controller = document.getElementById('controller');
 
-    var touchFlag = false;
     var controllerOffset = controller.clientWidth / 2;
     var wrapperOffsetX = wrapper.offsetLeft;
     var wrapperOffsetY = wrapper.offsetTop;
@@ -102,11 +101,13 @@ String form = R"#(
 
     wrapper.ontouchstart = function (e) {
       e.preventDefault();
-      touchFlag = true;
+      form.action = espPort + '/move';
+      form.elements['x'].value = 0;
+      form.elements['y'].value = 0;
+      form.submit();
     };
 
     wrapper.ontouchmove = function (e) {
-      if (!touchFlag) return;
       e.preventDefault();
 
       var touch = e.touches[0];
@@ -145,17 +146,11 @@ String form = R"#(
 
     wrapper.ontouchend = function (e) {
       e.preventDefault();
-      touchFlag = false;
-      
       form.action = espPort + '/stop';
       form.elements['x'].value = 0;
       form.elements['y'].value = 0;
       form.submit();
       moveHomePosition();
-      
-      setTimeout(function () {
-        form.submit();
-      }, 50);
     }
 
     window.onload = function () {

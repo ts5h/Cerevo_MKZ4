@@ -95,8 +95,9 @@ void setup() {
 
   servo.attach(SERVO_PIN);
   pinMode(LED_PIN, OUTPUT);
-  LED_H;
+  
   delay(100);
+  LED_H;
 }
 
 void loop() {
@@ -116,9 +117,7 @@ void handle_stop() {
   LED_L;
   servo.write(SERVO_CENTER);
   stop();
-
   server_8080.send(200, "text/html", "");
-  delay(10);
   LED_H;
 }
 
@@ -147,7 +146,6 @@ void handle_move() {
   }
 
   server_8080.send(200, "text/html", "");
-  delay(10);
   LED_H;
 }
 
