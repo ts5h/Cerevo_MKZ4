@@ -146,11 +146,16 @@ String form = R"#(
     wrapper.ontouchend = function (e) {
       e.preventDefault();
       touchFlag = false;
+      
       form.action = espPort + '/stop';
       form.elements['x'].value = 0;
       form.elements['y'].value = 0;
       form.submit();
-      setTimeout(moveHomePosition, 50);
+      moveHomePosition();
+      
+      setTimeout(function () {
+        form.submit();
+      }, 50);
     }
 
     window.onload = function () {

@@ -28,6 +28,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Full customized by ts5h, 2022
+
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
 #include <WiFi.h>
@@ -54,13 +56,11 @@ WebServer server_8080(8080);
 #include <ESP32Servo.h>
 
 // Degrees / You have to adjust your servo for each individual
-#define SERVO_CENTER 90
-#define SERVO_DEGREE 15
-#define SERVO_LEFT 75
-#define SERVO_RIGHT 105
+#define SERVO_PIN 16
+const int SERVO_CENTER = 90;
+const int SERVO_DEGREE = 15;
 
 Servo servo;
-const int SERVO_PIN = 16;
 char state = COMMAND_STOP;
 
 #define LED_PIN 2
@@ -94,7 +94,6 @@ void setup() {
   Serial.println("HTTP server started");
 
   servo.attach(SERVO_PIN);
-
   pinMode(LED_PIN, OUTPUT);
   LED_H;
   delay(100);
@@ -115,8 +114,8 @@ void handle_root() {
 void handle_stop() {
   Serial.println("Stop");
   LED_L;
-  stop_motor();
-  state = COMMAND_STOP;
+  servo.write(SERVO_CENTER);
+  stop();
   LED_H;
   server_8080.send(200, "text/html", "");
 }
@@ -129,23 +128,29 @@ void handle_move() {
 
   LED_L;
 
-  // left, right
+  // Left / Right
   if (x == 0) {
     servo.write(SERVO_CENTER);
   } else {
     int degree = SERVO_CENTER + round(SERVO_DEGREE * x);
-    servo.write(degree);
     Serial.println(degree);
+    servo.write(degree);
   }
 
+  // Forward / Back
   if (y == 0) {
-    handle_stop();
+    stop();
   } else {
     y > 0 ? drive(y) : back(y);
   }
 
   LED_H;
   server_8080.send(200, "text/html", "");
+}
+
+void stop() {
+  stop_motor();
+  state = COMMAND_STOP;
 }
 
 void drive(float y) {
@@ -184,6 +189,13 @@ void back(float y) {
   state = COMMAND_BACK;
 }
 
+void stop_motor() {
+  motor_func(ADDR1, 0x18);
+  delay(10);
+  motor_func(ADDR1, 0x1B);
+  delay(10);
+}
+
 void start_motor(float y) {
   char volt = 0x20;
 
@@ -204,13 +216,6 @@ void reverse_motor(float y) {
     motor_func(ADDR1, volt);
     delay(10);
   }
-}
-
-void stop_motor() {
-  motor_func(ADDR1, 0x18);
-  delay(10);
-  motor_func(ADDR1, 0x1B);
-  delay(10);
 }
 
 void motor_func(char add, char duty) {
