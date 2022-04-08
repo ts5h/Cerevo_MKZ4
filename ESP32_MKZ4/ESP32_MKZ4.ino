@@ -29,7 +29,7 @@
  */
 
 // Full customized by ts5h, 2022
-const boolean debug = true;
+const boolean debug = false;
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
@@ -38,7 +38,7 @@ const boolean debug = true;
 
 /* Set these to your desired credentials. */
 const char *ssid = "MKZ4";
-const char *password = "mkz4";
+const char *password = "";
 
 WebServer server(80);
 WebServer server_8080(8080);
@@ -108,7 +108,7 @@ void loop() {
 }
 
 
-// Control directions
+// Handlers
 void handle_root() {
   extern String form;
   server.send(200, "text/html", form);
@@ -145,7 +145,6 @@ void handle_move() {
     stop();
   } else {
     int speed = floor(10 * y);
-    if (debug) Serial.println(speed);
     y > 0 ? drive(speed) : back(speed);
   }
 
@@ -153,14 +152,13 @@ void handle_move() {
   LED_H;
 }
 
+// Motor functions
 void stop() {
   stop_motor();
   state = COMMAND_STOP;
 }
 
 void drive(int speed) {
-  if (debug) Serial.println("Forward");
-
   switch (state) {
     case COMMAND_BACK:
       stop_motor();
@@ -177,8 +175,6 @@ void drive(int speed) {
 }
 
 void back(int speed) {
-  if (debug) Serial.println("Back");
-
   switch (state) {
     case COMMAND_START:
       stop_motor();
