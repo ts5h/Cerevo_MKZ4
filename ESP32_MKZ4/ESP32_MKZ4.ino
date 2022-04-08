@@ -58,7 +58,7 @@ WebServer server_8080(8080);
 // Degrees / You have to adjust your servo for each individual
 #define SERVO_PIN 16
 const int SERVO_CENTER = 90;
-const int SERVO_DEGREE = 15;
+const int SERVO_DEGREE = 16;
 
 Servo servo;
 char state = COMMAND_STOP;
@@ -67,11 +67,14 @@ char state = COMMAND_STOP;
 #define LED_H (digitalWrite(2, HIGH))
 #define LED_L (digitalWrite(2, LOW))
 
+const boolean debug = false;
+
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
  */
 void setup() {
   delay(1000);
+
   Serial.begin(115200);
   Serial.println("Configuring access point...");
 
@@ -113,7 +116,7 @@ void handle_root() {
 }
 
 void handle_stop() {
-  Serial.println("Stop");
+  if (debug) Serial.println("Stop");
   LED_L;
   servo.write(SERVO_CENTER);
   stop();
@@ -155,7 +158,7 @@ void stop() {
 }
 
 void drive(float y) {
-  Serial.println("Forward");
+  if (debug) Serial.println("Forward");
 
   switch (state) {
     case COMMAND_BACK:
@@ -173,7 +176,7 @@ void drive(float y) {
 }
 
 void back(float y) {
-  Serial.println("Back");
+  if (debug) Serial.println("Back");
 
   switch (state) {
     case COMMAND_START:
