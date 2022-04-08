@@ -45,7 +45,6 @@ WebServer server_8080(8080);
 /* Set I2C library*/
 #include <Wire.h>
 #define ADDR1 0x64
-
 #define COMMAND_START 0
 #define COMMAND_STOP 1
 #define COMMAND_BACK 2
@@ -78,6 +77,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Configuring access point...");
 
+  // Motor
   Wire.begin(4, 14);
   delay(40);
 
@@ -145,6 +145,7 @@ void handle_move() {
   if (y == 0) {
     stop();
   } else {
+    // TODO: Speed change logic
     y > 0 ? drive(y) : back(y);
   }
 
