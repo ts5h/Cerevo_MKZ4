@@ -37,7 +37,7 @@
 
 /* Set these to your desired credentials. */
 const char *ssid = "MKZ4";
-const char *password = "";
+const char *password = "mkz4";
 
 WebServer server(80);
 WebServer server_8080(8080);
