@@ -29,6 +29,7 @@
  */
 
 // Full customized by ts5h, 2022
+const boolean debug = true;
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
@@ -65,8 +66,6 @@ char state = COMMAND_STOP;
 #define LED_PIN 2
 #define LED_H (digitalWrite(2, HIGH))
 #define LED_L (digitalWrite(2, LOW))
-
-const boolean debug = false;
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
@@ -145,8 +144,9 @@ void handle_move() {
   if (y == 0) {
     stop();
   } else {
-    // TODO: Speed change logic
-    y > 0 ? drive(y) : back(y);
+    int speed = floor(10 * y);
+    if (debug) Serial.println(speed);
+    y > 0 ? drive(speed) : back(speed);
   }
 
   server_8080.send(200, "text/html", "");
@@ -158,36 +158,36 @@ void stop() {
   state = COMMAND_STOP;
 }
 
-void drive(float y) {
+void drive(int speed) {
   if (debug) Serial.println("Forward");
 
   switch (state) {
     case COMMAND_BACK:
       stop_motor();
       delay(10);
-      start_motor(y);
+      start_motor(speed);
       break;
 
     case COMMAND_STOP:
-      start_motor(y);
+      start_motor(speed);
       break;
   }
   
   state = COMMAND_START;
 }
 
-void back(float y) {
+void back(int speed) {
   if (debug) Serial.println("Back");
 
   switch (state) {
     case COMMAND_START:
       stop_motor();
       delay(10);
-      reverse_motor(y);
+      reverse_motor(speed);
       break;
 
     case COMMAND_STOP:
-      reverse_motor(y);
+      reverse_motor(speed);
       break;
   }
 
@@ -201,10 +201,10 @@ void stop_motor() {
   delay(10);
 }
 
-void start_motor(float y) {
+void start_motor(int speed) {
   char volt = 0x20;
 
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < speed; i++) {
     volt = volt + ((0x40) * i);
     volt = volt | FORWARD;
     motor_func(ADDR1, volt);
@@ -212,10 +212,10 @@ void start_motor(float y) {
   }
 }
 
-void reverse_motor(float y) {
+void reverse_motor(int speed) {
   char volt = 0x20;
 
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < speed; i++) {
     volt = volt + ((0x40) * i);
     volt = volt | REVERSE;
     motor_func(ADDR1, volt);
