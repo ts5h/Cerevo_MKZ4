@@ -151,6 +151,11 @@ String form = R"#(
       form.elements['y'].value = 0;
       form.submit();
       moveHomePosition();
+
+      setTimeout(function () {
+        form.submit();
+      }, 30);
+      
     }
 
     window.onload = function () {
