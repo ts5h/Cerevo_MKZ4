@@ -29,7 +29,7 @@
  */
 
 // Full customized by ts5h, 2022
-const boolean debug = false;
+const boolean DEBUG = false;
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
@@ -115,7 +115,7 @@ void handle_root() {
 }
 
 void handle_stop() {
-  if (debug) Serial.println("Stop");
+  if (DEBUG) Serial.println("Stop");
   LED_L;
   servo.write(SERVO_CENTER);
   stop();
