@@ -63,9 +63,9 @@ const int SERVO_DEGREE = 16;
 Servo servo;
 char state = COMMAND_STOP;
 
-#define LED_PIN 2
-#define LED_H (digitalWrite(2, HIGH))
-#define LED_L (digitalWrite(2, LOW))
+#define LED_PIN 12
+#define LED_H (digitalWrite(12, HIGH))
+#define LED_L (digitalWrite(12, LOW))
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
