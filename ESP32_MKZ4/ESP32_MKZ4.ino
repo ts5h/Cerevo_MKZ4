@@ -29,7 +29,7 @@
  */
 
 // Full customized by ts5h, 2022
-const boolean DEBUG = false;
+const boolean DEBUG = true;
 
 /* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
@@ -45,6 +45,8 @@ WebServer server_8080(8080);
 
 /* Set I2C library*/
 #include <Wire.h>
+#define SDA 4
+#define SCL 14
 #define ADDR1 0x64
 #define COMMAND_START 0
 #define COMMAND_STOP 1
@@ -77,7 +79,7 @@ void setup() {
   Serial.println("Configuring access point...");
 
   // Motor
-  Wire.begin(4, 14);
+  Wire.begin(SDA, SCL);
   delay(40);
 
   /* You can remove the password parameter if you want the AP to be open. */
@@ -115,7 +117,6 @@ void handle_root() {
 }
 
 void handle_stop() {
-  if (DEBUG) Serial.println("Stop");
   LED_L;
   servo.write(SERVO_CENTER);
   stop();
@@ -136,7 +137,6 @@ void handle_move() {
     servo.write(SERVO_CENTER);
   } else {
     int degree = SERVO_CENTER + round(SERVO_DEGREE * x);
-    Serial.println(degree);
     servo.write(degree);
   }
 
@@ -200,7 +200,7 @@ void stop_motor() {
 void start_motor(int speed) {
   char volt = 0x20;
 
-  for (int i = 0; i < speed; i++) {
+  for (int i = 0; i < 5; i++) {
     volt = volt + ((0x40) * i);
     volt = volt | FORWARD;
     motor_func(ADDR1, volt);
@@ -211,7 +211,7 @@ void start_motor(int speed) {
 void reverse_motor(int speed) {
   char volt = 0x20;
 
-  for (int i = 0; i < speed; i++) {
+  for (int i = 0; i < 5; i++) {
     volt = volt + ((0x40) * i);
     volt = volt | REVERSE;
     motor_func(ADDR1, volt);
@@ -219,8 +219,8 @@ void reverse_motor(int speed) {
   }
 }
 
-void motor_func(char add, char duty) {
-  Wire.beginTransmission(add);
+void motor_func(char addr, char duty) {
+  Wire.beginTransmission(addr);
   Wire.write(0x00);
   Wire.write(duty);
   Wire.endTransmission();
