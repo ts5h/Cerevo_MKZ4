@@ -80,7 +80,8 @@ void setup() {
 
   // I2C
   Wire.begin(4, 14);
-  delay(40);
+  stop();
+  delay(20);
 
   /* You can remove the password parameter if you want the AP to be open. */
   WiFi.softAP(SSID, PASSWORD);
@@ -144,8 +145,8 @@ void handle_move() {
   if (y == 0) {
     stop();
   } else {
-    int speed = floor(10 * y);
-    y > 0 ? drive(speed) : back(speed);
+    int speed = floor(100 * y);
+    y > 0 ? drive(speed) : back(speed * -1);
   }
 
   server_8080.send(200, "text/html", "");
@@ -159,37 +160,19 @@ void stop() {
 }
 
 void drive(int speed) {
-  switch (state) {
-    case COMMAND_BACK:
-      stop_motor();
-      start_motor(speed);
-      break;
-
-    case COMMAND_STOP:
-      start_motor(speed);
-      break;
-  }
-  
+  if (state == COMMAND_BACK) stop_motor();
+  start_motor(speed);
   state = COMMAND_START;
 }
 
 void back(int speed) {
-  switch (state) {
-    case COMMAND_START:
-      stop_motor();
-      reverse_motor(speed);
-      break;
-
-    case COMMAND_STOP:
-      reverse_motor(speed);
-      break;
-  }
-
+  if (state == COMMAND_START) stop_motor();
+  reverse_motor(speed);
   state = COMMAND_BACK;
 }
 
 void stop_motor() {
-  // coasting / break
+  // Coasting then break
   motor_func(0x00 << 2 | 0x00);
   delay(10);
   motor_func(0x00 << 2 | BREAK);
@@ -208,15 +191,12 @@ void reverse_motor(int speed) {
   delay(10);
 }
 
-// duty: 0x06-0x32 (6-50) / 0.48V-2.57V
+// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.57V
 char speed_to_duty(int speed) {
-  return map(speed, 0, 100, 0x06, 0x32);
+  return (char) map(speed, 0, 100, 0x06, 0x20);
 }
 
-
 void motor_func(char duty) {
-  Serial.println(duty);
-
   Wire.beginTransmission(DRV8830_ADDR);
   Wire.write(CONTROL);
   Wire.write(duty);
