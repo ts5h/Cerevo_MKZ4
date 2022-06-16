@@ -28,46 +28,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Full customized by ts5h, 2022
+// Fully customized by ts5h, 2022
 const boolean DEBUG = true;
-
-/* Create a WiFi access point and provide a web server on it. */
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
+#include <Wire.h>
+#include <ESP32Servo.h>
 
 /* Set these to your desired credentials. */
-const char *ssid = "MKZ4";
-const char *password = "";
+const char *SSID = "MKZ4";
+const char *PASSWORD = "";
 
 WebServer server(80);
 WebServer server_8080(8080);
 
 /* Set I2C library*/
-#include <Wire.h>
-#define SDA 4
-#define SCL 14
-#define ADDR1 0x64
+#define DRV8830_ADDR 0x64
+#define CONTROL 0x00
+#define FAULT 0x01
+
+#define FORWARD 0x01
+#define REVERSE 0x02
+#define BREAK 0x03
+
 #define COMMAND_START 0
 #define COMMAND_STOP 1
 #define COMMAND_BACK 2
-#define FORWARD 0x01
-#define REVERSE 0x02
 
-// For SG90 Servo motor
-#include <ESP32Servo.h>
-
+/* Set SG90 Servo motor */
 // Degrees / You have to adjust your servo for each individual
-#define SERVO_PIN 16
+const int SERVO_PIN = 16;
 const int SERVO_CENTER = 90;
 const int SERVO_DEGREE = 16;
 
 Servo servo;
 char state = COMMAND_STOP;
 
-#define LED_PIN 12
-#define LED_H (digitalWrite(12, HIGH))
-#define LED_L (digitalWrite(12, LOW))
+const int LED_PIN = 12;
+#define LED_H (digitalWrite(LED_PIN, HIGH))
+#define LED_L (digitalWrite(LED_PIN, LOW))
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
@@ -78,12 +78,12 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Configuring access point...");
 
-  // Motor
-  Wire.begin(SDA, SCL);
+  // I2C
+  Wire.begin(4, 14);
   delay(40);
 
   /* You can remove the password parameter if you want the AP to be open. */
-  WiFi.softAP(ssid, password);
+  WiFi.softAP(SSID, PASSWORD);
 
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
@@ -162,7 +162,6 @@ void drive(int speed) {
   switch (state) {
     case COMMAND_BACK:
       stop_motor();
-      delay(10);
       start_motor(speed);
       break;
 
@@ -178,7 +177,6 @@ void back(int speed) {
   switch (state) {
     case COMMAND_START:
       stop_motor();
-      delay(10);
       reverse_motor(speed);
       break;
 
@@ -191,37 +189,36 @@ void back(int speed) {
 }
 
 void stop_motor() {
-  motor_func(ADDR1, 0x18);
+  // coasting / break
+  motor_func(0x00 << 2 | 0x00);
   delay(10);
-  motor_func(ADDR1, 0x1B);
+  motor_func(0x00 << 2 | BREAK);
   delay(10);
 }
 
 void start_motor(int speed) {
-  char volt = 0x20;
-
-  for (int i = 0; i < 5; i++) {
-    volt = volt + ((0x40) * i);
-    volt = volt | FORWARD;
-    motor_func(ADDR1, volt);
-    delay(10);
-  }
+  char duty = speed_to_duty(speed);
+  motor_func(duty << 2 | FORWARD);
+  delay(10);
 }
 
 void reverse_motor(int speed) {
-  char volt = 0x20;
-
-  for (int i = 0; i < 5; i++) {
-    volt = volt + ((0x40) * i);
-    volt = volt | REVERSE;
-    motor_func(ADDR1, volt);
-    delay(10);
-  }
+  char duty = speed_to_duty(speed);
+  motor_func(duty << 2 | REVERSE);
+  delay(10);
 }
 
-void motor_func(char addr, char duty) {
-  Wire.beginTransmission(addr);
-  Wire.write(0x00);
+// duty: 0x06-0x32 (6-50) / 0.48V-2.57V
+char speed_to_duty(int speed) {
+  return map(speed, 0, 100, 0x06, 0x32);
+}
+
+
+void motor_func(char duty) {
+  Serial.println(duty);
+
+  Wire.beginTransmission(DRV8830_ADDR);
+  Wire.write(CONTROL);
   Wire.write(duty);
   Wire.endTransmission();
 }
