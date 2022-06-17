@@ -29,7 +29,6 @@
  */
 
 // Fully customized by ts5h, 2022
-const boolean DEBUG = true;
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -73,17 +72,24 @@ const int LED_PIN = 12;
  * connected to this access point to see it.
  */
 void setup() {
+  pinMode(LED_PIN, OUTPUT);
   delay(1000);
 
-  Serial.begin(115200);
-  Serial.println("Configuring access point...");
-
-  // I2C
+  // Initialize motors
   Wire.begin(4, 14);
   stop();
+
+  servo.attach(SERVO_PIN);
+  servo_write(SERVO_CENTER);
+
+  /* 
+  Set & start WiFi
+  You can remove the password parameter if you want the AP to be open.
+  */
+  Serial.begin(115200);
+  Serial.println("Configuring access point...");
   delay(20);
 
-  /* You can remove the password parameter if you want the AP to be open. */
   WiFi.softAP(SSID, PASSWORD);
 
   IPAddress myIP = WiFi.softAPIP();
@@ -98,9 +104,6 @@ void setup() {
   server_8080.begin();
   Serial.println("HTTP server started");
 
-  servo.attach(SERVO_PIN);
-  pinMode(LED_PIN, OUTPUT);
-  
   delay(100);
   LED_H;
 }
