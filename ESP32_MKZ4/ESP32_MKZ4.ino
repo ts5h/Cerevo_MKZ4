@@ -80,7 +80,7 @@ void setup() {
   stop();
 
   servo.attach(SERVO_PIN);
-  servo_write(SERVO_CENTER);
+  servo.write(SERVO_CENTER);
 
   /* 
   Set & start WiFi
@@ -122,8 +122,8 @@ void handle_root() {
 
 void handle_stop() {
   LED_L;
-  servo.write(SERVO_CENTER);
   stop();
+  servo.write(SERVO_CENTER);
   server_8080.send(200, "text/html", "");
   LED_H;
 }
