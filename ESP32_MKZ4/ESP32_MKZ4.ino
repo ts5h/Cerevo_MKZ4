@@ -128,6 +128,8 @@ void handle_stop() {
   LED_H;
 }
 
+float oldY = 0;
+
 void handle_move() {
   if (!server_8080.hasArg("x") || !server_8080.hasArg("y")) return;
 
@@ -147,10 +149,12 @@ void handle_move() {
   // Forward / Back
   if (y == 0) {
     stop();
-  } else {
+  } else if (y != oldY) {
     int speed = floor(100 * y);
     y > 0 ? drive(speed) : back(speed * -1);
   }
+
+  oldY = y;
 
   server_8080.send(200, "text/html", "");
   LED_H;
@@ -194,9 +198,9 @@ void reverse_motor(int speed) {
   delay(10);
 }
 
-// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.57V
+// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.33V
 char speed_to_duty(int speed) {
-  return (char) map(speed, 0, 100, 0x06, 0x20);
+  return (char) map(speed, 0, 100, 0x06, 0x1D);
 }
 
 void motor_func(char duty) {
