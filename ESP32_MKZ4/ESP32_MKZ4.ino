@@ -111,6 +111,7 @@ void setup() {
 void loop() {
   server.handleClient();
   server_8080.handleClient();
+  delayMicroseconds(100);
 }
 
 
@@ -198,9 +199,9 @@ void reverse_motor(int speed) {
   delay(10);
 }
 
-// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.33V
+// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.57V
 char speed_to_duty(int speed) {
-  return (char) map(speed, 0, 100, 0x06, 0x1D);
+  return (char) map(speed, 0, 100, 0x06, 0x20);
 }
 
 void motor_func(char duty) {
