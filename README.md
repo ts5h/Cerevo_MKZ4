@@ -1,7 +1,9 @@
-# WIP: ESP32 MKZ4
+# ESP32 MKZ4
 Customized MKZ4 Firmware for ESP32 (**NOT** ESP8266).  
 Forked from `cereve/MKZ4` and customized.  
 https://github.com/cerevo/MKZ4
+
+*My machine works with these codes for now, but I don't expect them to work universally for all products, so I recommend customizing them.
 
 
 ## ESP32-Arduino / Installing using Arduino IDE
