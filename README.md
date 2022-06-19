@@ -5,7 +5,7 @@ https://github.com/cerevo/MKZ4
 
 *My machine works with these codes for now, but I don't expect them to work universally for all products, so I recommend customizing them.
 
-![from_right_4_3](https://user-images.githubusercontent.com/1344010/174502863-6742e2f0-0ed6-4e92-b0e1-5b460f96b6fc.jpg)
+![from_right_4_3](https://user-images.githubusercontent.com/1344010/174502927-d834a1dd-8fe4-42dc-a4cf-07398d9259a7.png)
 
 
 ## ESP32-Arduino / Installing using Arduino IDE
