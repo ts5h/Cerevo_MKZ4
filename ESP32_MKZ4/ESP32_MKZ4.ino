@@ -43,17 +43,21 @@ WebServer server(80);
 WebServer server_8080(8080);
 
 /* Set I2C library*/
-#define DRV8830_ADDR 0x64
-#define CONTROL 0x00
-#define FAULT 0x01
+const int SDA_PIN = 4;
+const int SCL_PIN = 14;
 
-#define FORWARD 0x01
-#define REVERSE 0x02
-#define BREAK 0x03
+const int DRV8830_ADDR = 0x64;
+const int CONTROL = 0x00;
+const int FAULT = 0x01;
 
-#define COMMAND_START 0
-#define COMMAND_STOP 1
-#define COMMAND_BACK 2
+const int COASTING = 0x00;
+const int FORWARD = 0x01;
+const int REVERSE = 0x02;
+const int BREAK = 0x03;
+
+const int COMMAND_START = 0;
+const int COMMAND_STOP = 1;
+const int COMMAND_BACK = 2;
 
 /* Set SG90 Servo motor */
 // Degrees / You have to adjust your servo for each individual
@@ -76,7 +80,7 @@ void setup() {
   delay(1000);
 
   // Initialize motors
-  Wire.begin(4, 14);
+  Wire.begin(SDA_PIN, SCL_PIN);
   stop();
 
   servo.attach(SERVO_PIN);
@@ -180,8 +184,7 @@ void back(int speed) {
 }
 
 void stop_motor() {
-  // Coasting then break
-  motor_func(0x00 << 2 | 0x00);
+  motor_func(0x00 << 2 | COASTING);
   delay(10);
   motor_func(0x00 << 2 | BREAK);
   delay(10);
