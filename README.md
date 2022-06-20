@@ -11,9 +11,9 @@ https://cerevo.shop-pro.jp/?pid=104131889
 (Official Shop Link, but may be only in Japan...)   
 
 
-*My machine works with these codes for now, but I don't expect them to work universally for all DIY products, so I recommend customizing them.
-
 ![from_right_4_3](https://user-images.githubusercontent.com/1344010/174665697-8dc8e9f1-966f-4778-bd89-090ed0802f1e.png)
+
+*My machine works with these codes for now, but I don't expect them to work universally for all DIY products, so I recommend customizing them.
 
 
 ## Schematic
