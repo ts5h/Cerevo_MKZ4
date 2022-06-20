@@ -1,11 +1,15 @@
 # ESP32 MKZ4
 Customized MKZ4 Firmware for ESP32 (**NOT** for ESP8266).  
-Forked from `cereve/MKZ4` and customized.  
+Based on `cerevo/MKZ4`.  
 https://github.com/cerevo/MKZ4
 
-*My machine works with these codes for now, but I don't expect them to work universally for all products, so I recommend customizing them.
+*My machine works with these codes for now, but I don't expect them to work universally for all DIY products, so I recommend customizing them.
 
 ![from_right_4_3](https://user-images.githubusercontent.com/1344010/174502927-d834a1dd-8fe4-42dc-a4cf-07398d9259a7.png)
+
+
+## Schematic
+WIP
 
 
 ## ESP32-Arduino / Installing using Arduino IDE
@@ -17,6 +21,7 @@ https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html
 
 - Servo Library for ESP32
 https://www.arduino.cc/reference/en/libraries/esp32servo/
+https://github.com/madhephaestus/ESP32Servo
 
 
 ## Ex) VS Code / c_cpp_properties.json
