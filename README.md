@@ -9,7 +9,7 @@ https://github.com/cerevo/MKZ4
 
 
 ## Schematic
-WIP
+See `schematic/schematic.pdf`
 
 
 ## ESP32-Arduino / Installing using Arduino IDE
