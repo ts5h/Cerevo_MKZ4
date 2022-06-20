@@ -2,6 +2,7 @@
 Customized MKZ4 Firmware for ESP32 (**NOT** for ESP8266).  
 Based on `cerevo/MKZ4`.  
 https://github.com/cerevo/MKZ4
+https://cerevo.shop-pro.jp/?pid=104131889 (Official Shop Link, but may be only in Japan...)
 
 *My machine works with these codes for now, but I don't expect them to work universally for all DIY products, so I recommend customizing them.
 
