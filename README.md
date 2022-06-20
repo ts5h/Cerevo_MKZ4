@@ -5,7 +5,7 @@ https://github.com/cerevo/MKZ4
 
 *My machine works with these codes for now, but I don't expect them to work universally for all DIY products, so I recommend customizing them.
 
-![from_right_4_3](https://user-images.githubusercontent.com/1344010/174665008-7c383e6b-36a1-4dbc-9a13-ddf7250322fe.png)
+![from_right_4_3](https://user-images.githubusercontent.com/1344010/174665697-8dc8e9f1-966f-4778-bd89-090ed0802f1e.png)
 
 
 ## Schematic
