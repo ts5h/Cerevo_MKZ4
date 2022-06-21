@@ -35,7 +35,7 @@
 #include <Wire.h>
 #include <ESP32Servo.h>
 
-/* Set these to your desired credentials. */
+/* Set these to your desired credentials */
 const char *SSID = "MKZ4";
 const char *PASSWORD = "";
 
@@ -72,9 +72,7 @@ const int LED_PIN = 12;
 #define LED_H (digitalWrite(LED_PIN, HIGH))
 #define LED_L (digitalWrite(LED_PIN, LOW))
 
-/* Just a little test message.  Go to http://192.168.4.1 in a web browser
- * connected to this access point to see it.
- */
+
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   delay(1000);
@@ -94,6 +92,7 @@ void setup() {
   Serial.println("Configuring access point...");
   delay(20);
 
+  /* Go to http://192.168.4.1 in your web browser */
   WiFi.softAP(SSID, PASSWORD);
 
   IPAddress myIP = WiFi.softAPIP();
@@ -121,6 +120,7 @@ void loop() {
 
 // Handlers
 void handle_root() {
+  // See form.ino
   extern String form;
   server.send(200, "text/html", form);
 }
