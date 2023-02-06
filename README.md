@@ -38,7 +38,7 @@ Add ESP32 libraries path to "includePath" like below:
 
 ```.vscode/c_cpp_properties.json
 "includePath": [
-    "C:\\Users\\at4\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\libraries",
+    "C:\\Users\\your_name\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\libraries",
     "${workspaceFolder}/**",
     "..\\libraries"
 ],
