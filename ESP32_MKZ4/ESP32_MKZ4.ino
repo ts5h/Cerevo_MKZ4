@@ -92,7 +92,7 @@ void setup() {
   Serial.println("Configuring access point...");
   delay(20);
 
-  /* Go to http://192.168.4.1 in your web browser */
+  /* Open http://192.168.4.1 in your web browser */
   WiFi.softAP(SSID, PASSWORD);
 
   IPAddress myIP = WiFi.softAPIP();
@@ -202,7 +202,7 @@ void reverse_motor(int speed) {
   delay(10);
 }
 
-// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.57V
+// Convert to duty: 0x06-0x20 (6-32) / 0.48V-2.52V
 char speed_to_duty(int speed) {
   return (char) map(speed, 0, 100, 0x06, 0x20);
 }
