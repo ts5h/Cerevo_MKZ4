@@ -10,8 +10,7 @@ https://www.ebay.com/itm/113952018901
 https://cerevo.shop-pro.jp/?pid=104131889  
 (Official Shop Link, but may be only in Japan...)   
 
-
-![from_right_4_3](https://user-images.githubusercontent.com/1344010/174665697-8dc8e9f1-966f-4778-bd89-090ed0802f1e.png)
+![from_right](https://user-images.githubusercontent.com/1344010/216851982-377f2a88-b5ff-49dc-8d8b-39dc27115f64.jpg)
 
 *My machine works by these codes for now, but I don't expect them to work universally for all your DIY products, so I recommend customizing them as you like.
 
